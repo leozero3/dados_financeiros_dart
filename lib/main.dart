@@ -10,6 +10,7 @@ void menu() {
   print('############ Inicio #############');
   print('\nSelecione uma das opções abaixo');
   print('1 - Ver a cotaçãp de hoje');
+  print('2 - Registrar a cotaçãp de hoje');
 
   String option = stdin.readLineSync();
 
@@ -17,11 +18,54 @@ void menu() {
     case 1:
       today();
       break;
+    case 2:
+      registerData();
+      break;
     default:
       print('\n\nOps, opção invalida. Selecione uma opção válida!!\n\n');
       menu();
       break;
   }
+}
+
+registerData() async {
+  var hgData = await getData();
+  dynamic fileData = readFile();
+
+  fileData = (fileData != null && fileData.length > 0
+      ? json.decode(fileData)
+      : List());
+
+  bool exist = false;
+  fileData.forEach((data) {
+    if (data['date'] == now()) exist = true;
+  });
+  if (!exist) {
+    fileData.add({'date': now(), 'data': '${hgData['data']}'});
+    
+    Directory dir = Directory.current;
+    File file = File(dir.path + '/meu_arquivo.txt');
+    RandomAccessFile raf = file.openSync(mode: FileMode.write);
+
+    raf.writeStringSync(json.encode(fileData));
+    raf.flushSync();
+    raf.close();
+
+    print('dados salvos *******************');
+  }
+  else
+    print(' \n\n\ Registro Não adicionado');
+}
+
+String readFile() {
+  Directory dir = Directory.current;
+  File file = File(dir.path + '/meu_arquivo.txt');
+
+  if(!file.existsSync()){
+    print('Arquivo não encontrado!');
+    return null;
+  }
+  return file.readAsStringSync();
 }
 
 today() async {
