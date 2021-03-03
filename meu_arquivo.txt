@@ -1,1 +1,1 @@
-[{"date":"02/03/2021","data":"Dollar: 5.666 | Euro: 6.848 | Pound Sterling: 7.914 | Argentine Peso: 0.0629 |Bitcoin: 284731.873"}]
+[{"date":"02/03/2021","data":"Dollar: 5.666 | Euro: 6.848 | Pound Sterling: 7.914 | Argentine Peso: 0.0629 |Bitcoin: 284731.873"},{"date":"01/03/2021","data":"Dollar: 5.666 | Euro: 6.848 | Pound Sterling: 7.914 | Argentine Peso: 0.0629 |Bitcoin: 308106.108"},{"date":"03/03/2021","data":"Dollar: 5.7467 | Euro: 6.927 | Pound Sterling: 8.019 | Argentine Peso: 0.0637 |Bitcoin: 311523.311"}]

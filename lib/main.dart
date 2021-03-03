@@ -11,6 +11,7 @@ void menu() {
   print('\nSelecione uma das opções abaixo');
   print('1 - Ver a cotaçãp de hoje');
   print('2 - Registrar a cotaçãp de hoje');
+  print('3 - Ver cotações registradas');
 
   String option = stdin.readLineSync();
 
@@ -21,6 +22,9 @@ void menu() {
     case 2:
       registerData();
       break;
+    case 3:
+      listData();
+      break;
     default:
       print('\n\nOps, opção invalida. Selecione uma opção válida!!\n\n');
       menu();
@@ -28,7 +32,7 @@ void menu() {
   }
 }
 
-registerData() async {
+Future registerData() async {
   var hgData = await getData();
   dynamic fileData = readFile();
 
@@ -42,19 +46,32 @@ registerData() async {
   });
   if (!exist) {
     fileData.add({'date': now(), 'data': '${hgData['data']}'});
-    
+
     Directory dir = Directory.current;
     File file = File(dir.path + '/meu_arquivo.txt');
     RandomAccessFile raf = file.openSync(mode: FileMode.write);
 
     raf.writeStringSync(json.encode(fileData));
     raf.flushSync();
-    raf.close();
+    await raf.close();
 
     print('dados salvos *******************');
   }
-  else
+  else {
     print(' \n\n\ Registro Não adicionado');
+  }
+}
+
+void listData() {
+  dynamic fileData = readFile();
+
+  fileData = (fileData != null && fileData.length > 0 ? json.decode(fileData) : List());
+
+  print('\n\n######################### Listagem das cotaçoes #########################');
+  
+  fileData.forEach((data){
+    print('${data['date']} => ${data['data']}');
+  });
 }
 
 String readFile() {
@@ -68,7 +85,7 @@ String readFile() {
   return file.readAsStringSync();
 }
 
-today() async {
+void today() async {
   var data = await getData();
   print('\n\n################### HG Brasil - Contação ####################');
   print('${data['date']} => ${data['data']}');
@@ -91,8 +108,9 @@ Future getData() async {
     formatedMap['data'] =
         '${usd['name']}: ${usd['buy']} | ${eur['name']}: ${eur['buy']} | ${gbp['name']}: ${gbp['buy']} | ${ars['name']}: ${ars['buy']} |${btc['name']}: ${btc['buy']}';
     return formatedMap;
-  } else
+  } else {
     throw ('Falhou');
+  }
 }
 
 String now() {
